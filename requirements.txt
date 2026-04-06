@@ -1,0 +1,5 @@
+AgenticBlocks.IO==0.2.0
+gradio==6.11.0
+pydantic==2.12.5
+requests==2.33.1
+litellm==1.83.3
