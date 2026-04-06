@@ -17,7 +17,7 @@ class AgentBridgeBlock(Block[AgentOutputToInput, AgentInput]):
         return AgentInput(prompt=input.response)
 
 async def main():
-    model_name = "ollama/gemma3:4b"
+    model_name = "gemini/gemini-3.1-flash-preview" #"ollama/gemma3:4b"
 
     if model_name.startswith("gemini/"):
         # Check if the API key is set in the environment
@@ -34,7 +34,7 @@ async def main():
         model=f"{model_name}",
         description="An agent that drafts an email based on the provided input.", 
         system_prompt="You are an assistant that drafts emails based on the provided" \
-        "subject, body, recipient name, and sender name."
+        "subject, body, recipient name, and sender name.",
     )
 
     revisor_agent_block = LLMAgentBlock(
@@ -44,7 +44,8 @@ async def main():
         system_prompt="You are an assistant that revises emails for clarity, tone,"\
             " and correctness, removing repeated"\
               " words and fixing typos. Also, complete the email if it is not complete. " \
-              "Return only the email content without any additional text."
+              "Return only the email content without any additional text.",
+        max_iterations=5
     )
 
     bridge_block = AgentBridgeBlock()

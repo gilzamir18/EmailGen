@@ -79,8 +79,7 @@ class EmailRubricValidatorBlock(Block[EmailValidationInput, EmailValidationOutpu
     """Static critic block — evaluates the email against the binary rubric
     and returns structured feedback so the parent LLMAgentBlock can self-correct."""
 
-    llm_model: str = "ollama/gemma3:4b"
-
+    llm_model: str = "gemini/gemini-3.1-flash-lite-preview"
     async def run(self, input: EmailValidationInput) -> EmailValidationOutput:
         rubric_lines = "\n".join(
             f"{i + 1}. Criterion: \"{r['criterion']}\""
@@ -139,7 +138,7 @@ class EmailRubricValidatorBlock(Block[EmailValidationInput, EmailValidationOutpu
 # ---------------------------------------------------------------------------
 
 async def main() -> None:
-    model_name = "ollama/gemma3:4b"
+    model_name = "gemini/gemini-3.1-flash-lite-preview" #"ollama/gemma3:4b"
 
     # Ferramenta crítica: avalia o email e devolve feedback ao mesmo agente
     validator = EmailRubricValidatorBlock(
@@ -173,6 +172,7 @@ async def main() -> None:
             "  5. Return ONLY the final approved email text — no commentary."
         ),
         tools=[validator],
+        max_iterations=5
     )
 
     graph = WorkflowGraph()
